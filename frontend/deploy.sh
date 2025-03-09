@@ -6,6 +6,9 @@ echo "Building and deploying to GitHub Pages..."
 # Install dependencies if needed
 npm install
 
+# Set environment variables
+export NEXT_PUBLIC_API_URL=https://ai-generated-resume.onrender.com
+
 # Build the project
 npm run build
 
@@ -15,13 +18,10 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Create out directory if it doesn't exist
-mkdir -p out
-
 # Create .nojekyll file to prevent Jekyll processing
-touch out/.nojekyll
+touch dist/.nojekyll
 
 # Deploy to GitHub Pages
-npx gh-pages -d out
+npx gh-pages -d dist
 
 echo "Deployment complete! Your site will be available at: https://arpitmohapatra.github.io/ai-generated-resume/" 
