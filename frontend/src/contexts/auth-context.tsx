@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { API_URL } from "@/config";
 
 interface User {
   username: string;
@@ -40,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchUserInfo = async (authToken: string) => {
     try {
-      const response = await fetch("http://localhost:8000/api/auth/me", {
+      const response = await fetch(`${API_URL}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -73,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       formData.append("username", username);
       formData.append("password", password);
 
-      const response = await fetch("http://localhost:8000/api/auth/token", {
+      const response = await fetch(`${API_URL}/api/auth/token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

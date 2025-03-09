@@ -30,6 +30,7 @@ import { GeneratedContent } from "@/components/generated-content";
 import { ProtectedRoute } from "@/components/protected-route";
 import { useAuth } from "@/contexts/auth-context";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { API_URL } from "@/config";
 
 const formSchema = z.object({
   resumeText: z.string().min(1, "Resume text is required"),
@@ -68,7 +69,7 @@ function GeneratorContent() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/api/upload-resume", {
+      const response = await fetch(`${API_URL}/api/upload-resume`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -105,16 +106,13 @@ function GeneratorContent() {
         resumeFormData.append("additional_info", values.additionalInfo);
       }
 
-      const resumeResponse = await fetch(
-        "http://localhost:8000/api/generate-resume",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: resumeFormData,
-        }
-      );
+      const resumeResponse = await fetch(`${API_URL}/api/generate-resume`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: resumeFormData,
+      });
 
       if (!resumeResponse.ok) {
         throw new Error("Failed to generate resume");
@@ -132,7 +130,7 @@ function GeneratorContent() {
       }
 
       const coverLetterResponse = await fetch(
-        "http://localhost:8000/api/generate-cover-letter",
+        `${API_URL}/api/generate-cover-letter`,
         {
           method: "POST",
           headers: {

@@ -2,12 +2,17 @@
 
 A full-stack application that uses AI to generate tailored resumes and cover letters based on job descriptions. The application allows users to upload their existing resume in various formats (PDF, DOCX, TXT, images) and generates optimized content for specific job applications.
 
+## Live Demo
+
+- **Frontend**: [https://arpitmohapatra.github.io/ai-generated-resume/](https://arpitmohapatra.github.io/ai-generated-resume/)
+- **Backend API**: [https://ai-generated-resume.onrender.com](https://ai-generated-resume.onrender.com)
+
 ## Features
 
 - Resume parsing from various file formats
 - AI-powered resume tailoring based on job descriptions
 - Cover letter generation
-- Modern, responsive UI
+- Modern, responsive UI with light/dark mode
 - Secure API with OpenAI integration
 
 ## Project Structure
@@ -87,13 +92,46 @@ The API will be available at http://localhost:8000.
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Deployment
+
+### Backend Deployment
+
+The backend is deployed on [Render](https://render.com) at https://ai-generated-resume.onrender.com.
+
+### Frontend Deployment
+
+The frontend is deployed on GitHub Pages at https://arpitmohapatra.github.io/ai-generated-resume/.
+
+To deploy updates to GitHub Pages:
+
+1. Navigate to the frontend directory:
+
+   ```bash
+   cd frontend
+   ```
+
+2. Run the deployment script:
+
+   ```bash
+   ./deploy.sh
+   ```
+
+   Or manually:
+
+   ```bash
+   npm run deploy
+   ```
+
 ## Usage
 
-1. Upload your resume or paste its content
-2. Enter the job description
-3. Add any additional information (optional)
-4. Click "Generate Resume & Cover Letter"
-5. View, copy, or download the generated content
+1. Sign in with the following credentials:
+   - Username: `heroictool`
+   - Password: `ImissMYc0ff33`
+2. Upload your resume or paste its content
+3. Enter the job description
+4. Add any additional information (optional)
+5. Click "Generate Resume & Cover Letter"
+6. View, copy, or download the generated content
 
 ## Technologies Used
 
