@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { ArrowLeft, FileText, Upload, LogOut } from "lucide-react";
+import { ArrowLeft, Upload, LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,8 +43,6 @@ type FormValues = z.infer<typeof formSchema>;
 function GeneratorContent() {
   const { user, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [resumeFile, setResumeFile] = useState<File | null>(null);
-  const [parsedResume, setParsedResume] = useState<string>("");
   const [generatedResume, setGeneratedResume] = useState<string>("");
   const [generatedCoverLetter, setGeneratedCoverLetter] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"resume" | "coverLetter">(
@@ -61,7 +59,6 @@ function GeneratorContent() {
   });
 
   const handleFileUpload = async (file: File) => {
-    setResumeFile(file);
     setIsLoading(true);
 
     const formData = new FormData();
@@ -82,7 +79,6 @@ function GeneratorContent() {
       }
 
       const data = await response.json();
-      setParsedResume(data.resume_text);
       form.setValue("resumeText", data.resume_text);
       toast.success("Resume uploaded and parsed successfully");
     } catch (error) {

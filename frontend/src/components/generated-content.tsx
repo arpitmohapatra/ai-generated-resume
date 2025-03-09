@@ -53,8 +53,8 @@ export function GeneratedContent({
             : "No Cover Letter Generated Yet"}
         </h3>
         <p className="text-sm text-slate-500 max-w-md dark:text-slate-400">
-          Fill out the form and click "Generate" to create your tailored{" "}
-          {type === "resume" ? "resume" : "cover letter"}.
+          Fill out the form and click &quot;Generate&quot; to create your
+          tailored {type === "resume" ? "resume" : "cover letter"}.
         </p>
       </div>
     );

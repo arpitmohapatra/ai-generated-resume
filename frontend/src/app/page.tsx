@@ -76,8 +76,8 @@ export default function Home() {
                 Add Job Description
               </h3>
               <p className="text-muted-foreground">
-                Paste the job description you're applying for to tailor your
-                resume to the specific role.
+                Paste the job description you&apos;re applying for to tailor
+                your resume to the specific role.
               </p>
             </div>
             <div className="bg-blue-50 p-6 rounded-lg border border-blue-100 shadow-sm dark:bg-blue-950/20 dark:border-blue-900/50">
