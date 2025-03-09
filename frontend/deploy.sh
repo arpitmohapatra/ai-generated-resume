@@ -3,6 +3,9 @@
 # Build and deploy to GitHub Pages
 echo "Building and deploying to GitHub Pages..."
 
+# Clean up any previous build
+rm -rf dist
+
 # Install dependencies if needed
 npm install
 
@@ -30,6 +33,6 @@ cp public/index.html dist/index.html
 node fix-paths.js
 
 # Deploy to GitHub Pages
-npx gh-pages -d dist
+npx gh-pages -d dist --no-history
 
 echo "Deployment complete! Your site will be available at: https://arpitmohapatra.github.io/ai-generated-resume/" 
