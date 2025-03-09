@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { API_URL, BASE_PATH } from "@/config";
+import { API_URL } from "@/config";
 
 interface User {
   username: string;
@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("token");
     setUser(null);
     setToken(null);
-    router.push(`${BASE_PATH}/login`);
+    router.push(`/login`);
     toast.success("Logged out successfully");
   };
 

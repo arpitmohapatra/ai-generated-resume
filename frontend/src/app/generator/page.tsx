@@ -30,7 +30,7 @@ import { GeneratedContent } from "@/components/generated-content";
 import { ProtectedRoute } from "@/components/protected-route";
 import { useAuth } from "@/contexts/auth-context";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { API_URL, BASE_PATH } from "@/config";
+import { API_URL } from "@/config";
 
 const formSchema = z.object({
   resumeText: z.string().min(1, "Resume text is required"),
@@ -158,7 +158,7 @@ function GeneratorContent() {
       <header className="bg-blue-600 text-white shadow-md dark:bg-blue-700">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Link href={`${BASE_PATH}/`}>
+            <Link href={`/`}>
               <Button
                 variant="ghost"
                 size="icon"
