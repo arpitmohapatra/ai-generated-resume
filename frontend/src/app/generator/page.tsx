@@ -8,7 +8,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { ArrowLeft, Upload, LogOut } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,21 +16,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
+} from "../../components/ui/form";
+import { Textarea } from "../../components/ui/textarea";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { ResumeUploader } from "@/components/resume-uploader";
-import { GeneratedContent } from "@/components/generated-content";
-import { ProtectedRoute } from "@/components/protected-route";
-import { useAuth } from "@/contexts/auth-context";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { API_URL } from "@/config";
+} from "../../components/ui/card";
+import { ResumeUploader } from "../../components/resume-uploader";
+import { GeneratedContent } from "../../components/generated-content";
+import { ProtectedRoute } from "../../components/protected-route";
+import { useAuth } from "../../contexts/auth-context";
+import { ThemeToggle } from "../../components/theme/theme-toggle";
+import { API_URL } from "../../config";
 
 const formSchema = z.object({
   resumeText: z.string().min(1, "Resume text is required"),

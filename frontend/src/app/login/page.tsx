@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useAuth } from "@/contexts/auth-context";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "../../contexts/auth-context";
+import { Button } from "../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,16 +15,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
+} from "../../components/ui/card";
+import { ThemeToggle } from "../../components/theme/theme-toggle";
 
 const formSchema = z.object({
   username: z.string().min(1, "Username is required"),
