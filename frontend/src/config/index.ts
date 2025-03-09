@@ -13,6 +13,14 @@ export const API_URL =
 export const BASE_PATH =
   process.env.NODE_ENV === "production" ? "/ai-generated-resume" : "";
 
+// Function to get the correct path for assets
+export const getAssetPath = (path: string): string => {
+  if (path.startsWith("/")) {
+    return `${BASE_PATH}${path}`;
+  }
+  return path;
+};
+
 // Application settings
 export const APP_CONFIG = {
   name: "AI Resume Generator",

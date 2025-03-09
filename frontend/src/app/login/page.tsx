@@ -25,6 +25,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { BASE_PATH } from "@/config";
 
 const formSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -57,7 +58,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background">
       <header className="w-full p-4 flex justify-between">
-        <Link href="/">
+        <Link href={`${BASE_PATH}/`}>
           <Button
             variant="ghost"
             className="text-blue-600 hover:text-blue-700 hover:bg-blue-50/50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20"
@@ -137,7 +138,7 @@ export default function LoginPage() {
               <p>
                 Don&apos;t have an account?{" "}
                 <Link
-                  href="/"
+                  href={`${BASE_PATH}/`}
                   className="text-blue-600 hover:underline dark:text-blue-400"
                 >
                   Back to Home

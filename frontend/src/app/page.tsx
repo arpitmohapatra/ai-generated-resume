@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { BASE_PATH } from "@/config";
 
 export default function Home() {
   return (
@@ -13,7 +14,7 @@ export default function Home() {
           </h1>
           <nav className="flex gap-4 items-center">
             <ThemeToggle />
-            <Link href="/login">
+            <Link href={`${BASE_PATH}/login`}>
               <Button
                 variant="outline"
                 className="border-blue-200 hover:bg-blue-50 dark:border-blue-800 dark:hover:bg-blue-900/50"
@@ -21,7 +22,7 @@ export default function Home() {
                 Sign In
               </Button>
             </Link>
-            <Link href="/generator">
+            <Link href={`${BASE_PATH}/generator`}>
               <Button variant="blue">Get Started</Button>
             </Link>
           </nav>
@@ -40,7 +41,7 @@ export default function Home() {
             tailored resume and cover letter in seconds.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/login">
+            <Link href={`${BASE_PATH}/login`}>
               <Button variant="blue" size="lg" className="px-8">
                 Create Your Resume
               </Button>
