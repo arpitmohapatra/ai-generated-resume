@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router as api_router
+from app.api.auth import router as auth_router
 
 app = FastAPI(
     title="AI Resume Generator API",
@@ -19,6 +20,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(api_router, prefix="/api")
+app.include_router(auth_router, prefix="/api/auth", tags=["authentication"])
 
 @app.get("/")
 async def root():

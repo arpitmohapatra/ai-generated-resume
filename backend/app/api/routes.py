@@ -3,12 +3,18 @@ from typing import Optional
 from app.services.resume_parser import parse_resume
 from app.services.openai_service import generate_tailored_resume, generate_cover_letter
 from app.core.config import get_settings
+from app.core.auth import get_current_active_user, User
 
 router = APIRouter()
+
+# Protected route decorator
+def require_auth(current_user: User = Depends(get_current_active_user)):
+    return current_user
 
 @router.post("/upload-resume")
 async def upload_resume(
     file: UploadFile = File(...),
+    current_user: User = Depends(require_auth),
 ):
     """
     Upload and parse a resume file (PDF, DOCX, TXT, or image)
@@ -25,6 +31,7 @@ async def generate_resume(
     resume_text: str = Form(...),
     job_description: str = Form(...),
     additional_info: Optional[str] = Form(None),
+    current_user: User = Depends(require_auth),
 ):
     """
     Generate a tailored resume based on the original resume and job description
@@ -40,6 +47,7 @@ async def create_cover_letter(
     resume_text: str = Form(...),
     job_description: str = Form(...),
     additional_info: Optional[str] = Form(None),
+    current_user: User = Depends(require_auth),
 ):
     """
     Generate a cover letter based on the resume and job description

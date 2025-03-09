@@ -52,33 +52,33 @@ export function ResumeUploader({
         {...getRootProps()}
         className={`border-2 border-dashed rounded-md p-6 text-center cursor-pointer transition-colors ${
           isDragActive
-            ? "border-slate-400 bg-slate-100"
-            : "border-slate-300 hover:border-slate-400"
+            ? "border-primary bg-primary/5"
+            : "border-border hover:border-primary"
         } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center justify-center gap-2">
-          <Upload className="h-8 w-8 text-slate-400" />
-          <p className="text-sm text-slate-600">
+          <Upload className="h-8 w-8 text-primary" />
+          <p className="text-sm text-muted-foreground">
             {isDragActive
               ? "Drop the file here"
               : "Drag and drop your resume, or click to select"}
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-muted-foreground/70">
             Supports PDF, Word, TXT, and image files
           </p>
         </div>
       </div>
 
       {file && (
-        <div className="flex items-center justify-between p-3 bg-slate-100 rounded-md">
+        <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md border border-border">
           <div className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-slate-600" />
+            <FileText className="h-5 w-5 text-primary" />
             <div>
               <p className="text-sm font-medium truncate max-w-[200px]">
                 {file.name}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted-foreground">
                 {(file.size / 1024).toFixed(1)} KB
               </p>
             </div>
@@ -88,7 +88,7 @@ export function ResumeUploader({
               variant="ghost"
               size="icon"
               onClick={removeFile}
-              className="h-8 w-8"
+              className="h-8 w-8 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </Button>
