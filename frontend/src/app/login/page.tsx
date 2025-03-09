@@ -68,8 +68,8 @@ export default function LoginPage() {
         <ThemeToggle />
       </header>
       <div className="flex-1 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-lg border-blue-100 dark:border-blue-900/50 h-auto login-container">
-          <CardHeader className="space-y-1 bg-blue-600 text-white rounded-t-lg dark:bg-blue-700">
+        <Card className="w-full max-w-md shadow-lg border-blue-100 dark:border-blue-900/50 h-auto login-container p-0">
+          <CardHeader className="space-y-1 bg-blue-600 text-white rounded-t-lg dark:bg-blue-700 py-4">
             <CardTitle className="text-2xl font-bold text-center">
               Sign In
             </CardTitle>
