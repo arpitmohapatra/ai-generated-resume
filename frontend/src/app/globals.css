@@ -125,11 +125,21 @@
   }
 }
 
-/* Custom button styles to ensure blue buttons */
+/* Custom button styles for blue theme */
 .btn-blue {
-  @apply bg-blue-600 hover:bg-blue-700 text-white;
+  @apply bg-blue-600 hover:bg-blue-700 text-white shadow-md transition-colors duration-200;
 }
 
 .dark .btn-blue {
-  @apply bg-blue-500 hover:bg-blue-600 text-white;
+  @apply bg-blue-500 hover:bg-blue-600 text-white shadow-md;
+}
+
+/* Ensure consistent button alignment */
+button[data-slot="button"] {
+  @apply flex items-center justify-center;
+}
+
+/* Fix container heights for login page */
+.login-container {
+  @apply h-auto min-h-[400px] flex flex-col;
 }

@@ -125,8 +125,8 @@ To deploy updates to GitHub Pages:
 ## Usage
 
 1. Sign in with the following credentials:
-   - Username: `heroictool`
-   - Password: `ImissMYc0ff33`
+   - Username: `ask-author`
+   - Password: `ask-author`
 2. Upload your resume or paste its content
 3. Enter the job description
 4. Add any additional information (optional)

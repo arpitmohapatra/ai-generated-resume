@@ -10,9 +10,9 @@ settings = get_settings()
 
 # Simple user database - in a real app, this would be in a database
 USERS_DB = {
-    "heroictool": {
-        "username": "heroictool",
-        "password": "ImissMYc0ff33",
+    settings.AUTH_USERNAME: {
+        "username": settings.AUTH_USERNAME,
+        "password": settings.AUTH_PASSWORD,
         "email": "user@example.com",
         "full_name": "Heroic Tool"
     }

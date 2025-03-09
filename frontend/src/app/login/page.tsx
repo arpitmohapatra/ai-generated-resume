@@ -59,8 +59,8 @@ export default function LoginPage() {
       <header className="w-full p-4 flex justify-between">
         <Link href={`/`}>
           <Button
-            variant="ghost"
-            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50/50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20"
+            variant="blue"
+            className="hover:bg-blue-600/90 dark:hover:bg-blue-500/90"
           >
             ← Back to Home
           </Button>
@@ -68,7 +68,7 @@ export default function LoginPage() {
         <ThemeToggle />
       </header>
       <div className="flex-1 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-lg border-blue-100 dark:border-blue-900/50">
+        <Card className="w-full max-w-md shadow-lg border-blue-100 dark:border-blue-900/50 h-auto login-container">
           <CardHeader className="space-y-1 bg-blue-600 text-white rounded-t-lg dark:bg-blue-700">
             <CardTitle className="text-2xl font-bold text-center">
               Sign In
@@ -77,7 +77,7 @@ export default function LoginPage() {
               Enter your credentials to access the AI Resume Generator
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-6">
+          <CardContent className="pt-6 pb-6">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -133,7 +133,7 @@ export default function LoginPage() {
               </form>
             </Form>
 
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-6 text-center text-sm">
               <p>
                 Don&apos;t have an account?{" "}
                 <Link
