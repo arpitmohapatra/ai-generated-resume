@@ -26,9 +26,14 @@ jobs:
         run: cd frontend && npm run build
         env:
           NEXT_PUBLIC_API_URL: https://ai-generated-resume.onrender.com
+          NODE_ENV: production
 
-      - name: Add .nojekyll file
-        run: touch frontend/dist/.nojekyll
+      - name: Prepare for deployment
+        run: |
+          touch frontend/dist/.nojekyll
+          cp frontend/public/404.html frontend/dist/404.html
+          cp frontend/public/index.html frontend/dist/index.html
+          cd frontend && node fix-paths.js
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4

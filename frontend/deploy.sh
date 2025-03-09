@@ -8,6 +8,7 @@ npm install
 
 # Set environment variables
 export NEXT_PUBLIC_API_URL=https://ai-generated-resume.onrender.com
+export NODE_ENV=production
 
 # Build the project
 npm run build
@@ -20,6 +21,13 @@ fi
 
 # Create .nojekyll file to prevent Jekyll processing
 touch dist/.nojekyll
+
+# Copy the custom 404.html to the root of the dist directory
+cp public/404.html dist/404.html
+cp public/index.html dist/index.html
+
+# Fix asset paths
+node fix-paths.js
 
 # Deploy to GitHub Pages
 npx gh-pages -d dist
