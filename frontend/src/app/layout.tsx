@@ -19,6 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/ai-generated-resume/favicon.ico" />
+        <base href="/ai-generated-resume/" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

@@ -226,7 +226,7 @@ function GeneratorContent() {
                             <FormControl>
                               <Textarea
                                 placeholder="Paste your resume text or upload a file above"
-                                className="min-h-[200px] border-blue-200 dark:border-blue-900/50"
+                                className="min-h-[160px] max-h-[160px] border-blue-200 dark:border-blue-900/50"
                                 {...field}
                               />
                             </FormControl>
@@ -244,7 +244,7 @@ function GeneratorContent() {
                             <FormControl>
                               <Textarea
                                 placeholder="Paste the job description here"
-                                className="min-h-[200px] border-blue-200 dark:border-blue-900/50"
+                                className="min-h-[160px] max-h-[160px] border-blue-200 dark:border-blue-900/50"
                                 {...field}
                               />
                             </FormControl>
@@ -264,7 +264,7 @@ function GeneratorContent() {
                             <FormControl>
                               <Textarea
                                 placeholder="Add any additional information or specific instructions"
-                                className="min-h-[100px] border-blue-200 dark:border-blue-900/50"
+                                className="min-h-[80px] max-h-[160px] border-blue-200 dark:border-blue-900/50"
                                 {...field}
                               />
                             </FormControl>
