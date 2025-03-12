@@ -160,7 +160,6 @@ export function GeneratedContent({
     const lines = markdownText.split("\n");
 
     let inList = false;
-    let listItems: string[] = [];
     let currentSection: string | null = null;
 
     // Process lines
@@ -170,23 +169,6 @@ export function GeneratedContent({
 
       // Skip empty lines but add paragraph spacing
       if (!trimmedLine) {
-        if (inList) {
-          // End of list - process each list item as a separate paragraph with bullet
-          listItems.forEach((item) => {
-            elements.push(
-              new Paragraph({
-                bullet: { level: 0 },
-                children: processTextFormatting(item.trim()),
-                spacing: {
-                  after: 80,
-                  before: 80,
-                },
-              })
-            );
-          });
-          listItems = [];
-          inList = false;
-        }
         elements.push(new Paragraph({}));
         continue;
       }
@@ -238,67 +220,29 @@ export function GeneratedContent({
       }
       // List items with proper bullet formatting
       else if (trimmedLine.startsWith("- ") || trimmedLine.startsWith("* ")) {
-        if (!inList) {
-          inList = true;
-          listItems = [];
-        }
-        listItems.push(trimmedLine.substring(2));
+        // Extract the content after the bullet marker and create a bullet paragraph
+        const itemContent = trimmedLine.substring(2).trim();
 
-        // Check if this is the last list item or if the next line is not a list item
-        const nextLine = i < lines.length - 1 ? lines[i + 1].trim() : "";
-        if (
-          i === lines.length - 1 ||
-          !(nextLine.startsWith("- ") || nextLine.startsWith("* "))
-        ) {
-          // Process each list item as a separate paragraph with bullet
-          listItems.forEach((item) => {
-            elements.push(
-              new Paragraph({
-                bullet: { level: 0 },
-                children: processTextFormatting(item.trim()),
-                spacing: {
-                  after: 80,
-                  before: 80,
-                },
-              })
-            );
-          });
-
-          listItems = [];
-          inList = false;
-        }
+        // Create a bullet paragraph with the content
+        elements.push(
+          new Paragraph({
+            bullet: { level: 0 },
+            children: formatTextWithStyles(itemContent),
+            spacing: {
+              after: 80,
+              before: 80,
+            },
+          })
+        );
       }
       // Regular paragraph with proper formatting
       else {
-        if (inList) {
-          // End of list - process each list item as a separate paragraph with bullet
-          listItems.forEach((item) => {
-            elements.push(
-              new Paragraph({
-                bullet: { level: 0 },
-                children: processTextFormatting(item.trim()),
-                spacing: {
-                  after: 80,
-                  before: 80,
-                },
-              })
-            );
-          });
-          listItems = [];
-          inList = false;
-        }
-
-        // Check if this might be a continuation of previous paragraph
-        const isPrevLineEmpty = i > 0 && lines[i - 1].trim() === "";
-        const isNextLineEmpty =
-          i < lines.length - 1 && lines[i + 1].trim() === "";
-
         // Create paragraph with proper spacing
         elements.push(
           new Paragraph({
-            children: processTextFormatting(trimmedLine),
+            children: formatTextWithStyles(trimmedLine),
             spacing: {
-              after: isNextLineEmpty ? 240 : 120,
+              after: 120,
               line: 360, // 1.5 line spacing
             },
           })
@@ -306,103 +250,62 @@ export function GeneratedContent({
       }
     }
 
-    // Handle any remaining list items
-    if (listItems.length > 0) {
-      // Process each list item as a separate paragraph with bullet
-      listItems.forEach((item) => {
-        elements.push(
-          new Paragraph({
-            bullet: { level: 0 },
-            children: processTextFormatting(item.trim()),
-            spacing: {
-              after: 80,
-              before: 80,
-            },
-          })
-        );
-      });
-    }
-
     return elements;
   };
 
-  // Helper function to process text formatting (bold, italic, etc.)
-  const processTextFormatting = (text: string): TextRun[] => {
+  // Helper function to format text with styles (bold, italic)
+  const formatTextWithStyles = (text: string): TextRun[] => {
     const runs: TextRun[] = [];
-
-    // Process the text to handle bold, italic, etc.
-    let remainingText = text;
     let currentIndex = 0;
 
-    // Find all bold text (**text**)
-    const boldRegex = /\*\*(.+?)\*\*/g;
-    let boldMatch;
-    let lastIndex = 0;
+    // Process bold and italic formatting
+    const regex = /(\*\*.*?\*\*|\*.*?\*)/g;
+    let match;
 
-    while ((boldMatch = boldRegex.exec(text)) !== null) {
-      // Add text before the bold part
-      if (boldMatch.index > lastIndex) {
-        const beforeText = text.substring(lastIndex, boldMatch.index);
-        runs.push(new TextRun({ text: beforeText }));
-      }
-
-      // Add the bold text
-      runs.push(
-        new TextRun({
-          text: boldMatch[1],
-          bold: true,
-        })
-      );
-
-      lastIndex = boldMatch.index + boldMatch[0].length;
-    }
-
-    // Add any remaining text
-    if (lastIndex < text.length) {
-      const remainingText = text.substring(lastIndex);
-
-      // Check for italic text in the remaining part
-      const italicRegex = /\*(.+?)\*/g;
-      let italicMatch;
-      let italicLastIndex = 0;
-
-      while ((italicMatch = italicRegex.exec(remainingText)) !== null) {
-        // Add text before the italic part
-        if (italicMatch.index > italicLastIndex) {
-          const beforeText = remainingText.substring(
-            italicLastIndex,
-            italicMatch.index
-          );
-          runs.push(new TextRun({ text: beforeText }));
-        }
-
-        // Add the italic text
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before the formatted part
+      if (match.index > currentIndex) {
         runs.push(
           new TextRun({
-            text: italicMatch[1],
+            text: text.substring(currentIndex, match.index),
+          })
+        );
+      }
+
+      const content = match[0];
+
+      // Handle bold text (**text**)
+      if (content.startsWith("**") && content.endsWith("**")) {
+        runs.push(
+          new TextRun({
+            text: content.substring(2, content.length - 2),
+            bold: true,
+          })
+        );
+      }
+      // Handle italic text (*text*)
+      else if (content.startsWith("*") && content.endsWith("*")) {
+        runs.push(
+          new TextRun({
+            text: content.substring(1, content.length - 1),
             italics: true,
           })
         );
-
-        italicLastIndex = italicMatch.index + italicMatch[0].length;
       }
 
-      // Add any final remaining text
-      if (italicLastIndex < remainingText.length) {
-        runs.push(
-          new TextRun({
-            text: remainingText.substring(italicLastIndex),
-          })
-        );
-      }
-
-      // If no italic formatting was found, add the whole remaining text
-      if (italicLastIndex === 0) {
-        runs.push(new TextRun({ text: remainingText }));
-      }
+      currentIndex = match.index + match[0].length;
     }
 
-    // If no formatting was found at all, just return the original text
+    // Add any remaining text
+    if (currentIndex < text.length) {
+      runs.push(
+        new TextRun({
+          text: text.substring(currentIndex),
+        })
+      );
+    }
+
+    // If no formatting was found, just return the original text
     if (runs.length === 0) {
       runs.push(new TextRun({ text }));
     }
