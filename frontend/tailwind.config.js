@@ -65,7 +65,50 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: "100%",
+            color: "inherit",
+            a: {
+              color: "inherit",
+              textDecoration: "underline",
+              fontWeight: "500",
+            },
+            strong: {
+              color: "inherit",
+              fontWeight: "700",
+            },
+            h1: {
+              color: "inherit",
+            },
+            h2: {
+              color: "inherit",
+            },
+            h3: {
+              color: "inherit",
+            },
+            h4: {
+              color: "inherit",
+            },
+            code: {
+              color: "inherit",
+              backgroundColor: "var(--tw-prose-pre-bg)",
+              borderRadius: "0.25rem",
+              paddingLeft: "0.25rem",
+              paddingRight: "0.25rem",
+              paddingTop: "0.125rem",
+              paddingBottom: "0.125rem",
+            },
+            pre: {
+              backgroundColor: "var(--tw-prose-pre-bg)",
+              borderRadius: "0.375rem",
+              padding: "0.75rem 1rem",
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };

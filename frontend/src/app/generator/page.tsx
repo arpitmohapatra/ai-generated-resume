@@ -94,11 +94,12 @@ function GeneratorContent() {
 
     try {
       const token = localStorage.getItem("token");
+
       // Generate tailored resume
       const resumeFormData = new FormData();
       resumeFormData.append("resume_text", values.resumeText);
       resumeFormData.append("job_description", values.jobDescription);
-      if (values.additionalInfo) {
+      if (values.additionalInfo && values.additionalInfo.trim() !== "") {
         resumeFormData.append("additional_info", values.additionalInfo);
       }
 
@@ -111,7 +112,8 @@ function GeneratorContent() {
       });
 
       if (!resumeResponse.ok) {
-        throw new Error("Failed to generate resume");
+        const errorData = await resumeResponse.json();
+        throw new Error(errorData.detail || "Failed to generate resume");
       }
 
       const resumeData = await resumeResponse.json();
@@ -121,7 +123,7 @@ function GeneratorContent() {
       const coverLetterFormData = new FormData();
       coverLetterFormData.append("resume_text", values.resumeText);
       coverLetterFormData.append("job_description", values.jobDescription);
-      if (values.additionalInfo) {
+      if (values.additionalInfo && values.additionalInfo.trim() !== "") {
         coverLetterFormData.append("additional_info", values.additionalInfo);
       }
 
@@ -137,7 +139,8 @@ function GeneratorContent() {
       );
 
       if (!coverLetterResponse.ok) {
-        throw new Error("Failed to generate cover letter");
+        const errorData = await coverLetterResponse.json();
+        throw new Error(errorData.detail || "Failed to generate cover letter");
       }
 
       const coverLetterData = await coverLetterResponse.json();
@@ -146,7 +149,11 @@ function GeneratorContent() {
       toast.success("Resume and cover letter generated successfully");
     } catch (error) {
       console.error("Error generating content:", error);
-      toast.error("Failed to generate content. Please try again.");
+      toast.error(
+        `Failed to generate content: ${
+          error instanceof Error ? error.message : "Please try again"
+        }`
+      );
     } finally {
       setIsLoading(false);
     }
