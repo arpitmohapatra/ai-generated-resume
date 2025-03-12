@@ -171,15 +171,19 @@ export function GeneratedContent({
       // Skip empty lines but add paragraph spacing
       if (!trimmedLine) {
         if (inList) {
-          // End of list
-          elements.push(
-            new Paragraph({
-              bullet: { level: 0 },
-              children: listItems
-                .map((item) => processTextFormatting(item.trim()))
-                .flat(),
-            })
-          );
+          // End of list - process each list item as a separate paragraph with bullet
+          listItems.forEach((item) => {
+            elements.push(
+              new Paragraph({
+                bullet: { level: 0 },
+                children: processTextFormatting(item.trim()),
+                spacing: {
+                  after: 80,
+                  before: 80,
+                },
+              })
+            );
+          });
           listItems = [];
           inList = false;
         }
@@ -240,23 +244,26 @@ export function GeneratedContent({
         }
         listItems.push(trimmedLine.substring(2));
 
-        // Check if this is the last list item
+        // Check if this is the last list item or if the next line is not a list item
         const nextLine = i < lines.length - 1 ? lines[i + 1].trim() : "";
         if (
-          !(nextLine.startsWith("- ") || nextLine.startsWith("* ")) &&
-          i === lines.length - 1
+          i === lines.length - 1 ||
+          !(nextLine.startsWith("- ") || nextLine.startsWith("* "))
         ) {
-          elements.push(
-            new Paragraph({
-              bullet: { level: 0 },
-              children: listItems
-                .map((item) => processTextFormatting(item.trim()))
-                .flat(),
-              spacing: {
-                after: 120,
-              },
-            })
-          );
+          // Process each list item as a separate paragraph with bullet
+          listItems.forEach((item) => {
+            elements.push(
+              new Paragraph({
+                bullet: { level: 0 },
+                children: processTextFormatting(item.trim()),
+                spacing: {
+                  after: 80,
+                  before: 80,
+                },
+              })
+            );
+          });
+
           listItems = [];
           inList = false;
         }
@@ -264,18 +271,19 @@ export function GeneratedContent({
       // Regular paragraph with proper formatting
       else {
         if (inList) {
-          // End of list
-          elements.push(
-            new Paragraph({
-              bullet: { level: 0 },
-              children: listItems
-                .map((item) => processTextFormatting(item.trim()))
-                .flat(),
-              spacing: {
-                after: 120,
-              },
-            })
-          );
+          // End of list - process each list item as a separate paragraph with bullet
+          listItems.forEach((item) => {
+            elements.push(
+              new Paragraph({
+                bullet: { level: 0 },
+                children: processTextFormatting(item.trim()),
+                spacing: {
+                  after: 80,
+                  before: 80,
+                },
+              })
+            );
+          });
           listItems = [];
           inList = false;
         }
@@ -300,17 +308,19 @@ export function GeneratedContent({
 
     // Handle any remaining list items
     if (listItems.length > 0) {
-      elements.push(
-        new Paragraph({
-          bullet: { level: 0 },
-          children: listItems
-            .map((item) => processTextFormatting(item.trim()))
-            .flat(),
-          spacing: {
-            after: 120,
-          },
-        })
-      );
+      // Process each list item as a separate paragraph with bullet
+      listItems.forEach((item) => {
+        elements.push(
+          new Paragraph({
+            bullet: { level: 0 },
+            children: processTextFormatting(item.trim()),
+            spacing: {
+              after: 80,
+              before: 80,
+            },
+          })
+        );
+      });
     }
 
     return elements;
