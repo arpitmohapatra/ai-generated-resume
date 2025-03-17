@@ -6,14 +6,7 @@ import remarkGfm from "remark-gfm";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
 import { saveAs } from "file-saver";
-import {
-  Document,
-  Packer,
-  Paragraph,
-  TextRun,
-  HeadingLevel,
-  AlignmentType,
-} from "docx";
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 
 interface GeneratedContentProps {
   content: string;

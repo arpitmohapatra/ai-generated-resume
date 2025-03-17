@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     
     # Authentication settings
     AUTH_USERNAME: str = "heroictool"  # Default value, override in .env
-    AUTH_PASSWORD: str = "ImissMYc0ff33"  # Default value, override in .env
+    AUTH_PASSWORD: str = "heroictool"  # Default value, override in .env
     
     class Config:
         env_file = ".env"
