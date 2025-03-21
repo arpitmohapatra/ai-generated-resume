@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@radix-ui/react-progress": "^1.1.2",
-    "stopwords": "^0.0.9"
-  }
-}

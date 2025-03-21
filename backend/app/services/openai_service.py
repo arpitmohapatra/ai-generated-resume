@@ -42,7 +42,7 @@ async def generate_tailored_resume(
     
     # Instructions:
     1. Rewrite the resume to highlight skills and experiences that match the job description
-    2. Keep the same general structure but reorganize sections if needed to emphasize relevant experience
+    2. Modify sections if needed to emphasize relevant experience
     3. Use action verbs and quantify achievements where possible
     4. Remove or downplay irrelevant information
     5. Maintain a professional tone and format

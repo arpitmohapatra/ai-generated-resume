@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { ArrowLeft, Upload, LogOut } from "lucide-react";
+import { ArrowLeft, Upload, LogOut, Search } from "lucide-react";
 
 import { Button } from "../../components/ui/button";
 import {
@@ -44,6 +44,7 @@ type FormValues = z.infer<typeof formSchema>;
 function GeneratorContent() {
   const { user, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [generatedResume, setGeneratedResume] = useState<string>("");
   const [generatedCoverLetter, setGeneratedCoverLetter] = useState<string>("");
   const [atsAnalysis, setATSAnalysis] = useState(null);
@@ -62,7 +63,6 @@ function GeneratorContent() {
 
   const handleFileUpload = async (file: File) => {
     setIsLoading(true);
-    setATSAnalysis(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -92,9 +92,54 @@ function GeneratorContent() {
     }
   };
 
+  const analyzeATS = async () => {
+    const values = form.getValues();
+    if (!values.resumeText || !values.jobDescription) {
+      toast.error(
+        "Please provide both resume text and job description for ATS analysis"
+      );
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setATSAnalysis(null);
+
+    try {
+      const token = localStorage.getItem("token");
+      const atsFormData = new FormData();
+      atsFormData.append("resume_text", values.resumeText);
+      atsFormData.append("job_description", values.jobDescription);
+
+      const atsResponse = await fetch(`${API_URL}/api/analyze-resume`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: atsFormData,
+      });
+
+      if (!atsResponse.ok) {
+        const errorData = await atsResponse.json();
+        throw new Error(errorData.detail || "Failed to analyze resume");
+      }
+
+      const atsData = await atsResponse.json();
+      setATSAnalysis(atsData.analysis);
+      toast.success("ATS analysis completed");
+    } catch (error) {
+      console.error("Error analyzing resume:", error);
+      toast.error(
+        `Failed to analyze resume: ${
+          error instanceof Error ? error.message : "Please try again"
+        }`
+      );
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
-    setATSAnalysis(null);
 
     try {
       const token = localStorage.getItem("token");
@@ -107,40 +152,21 @@ function GeneratorContent() {
         resumeFormData.append("additional_info", values.additionalInfo);
       }
 
-      const [resumeResponse, atsResponse] = await Promise.all([
-        fetch(`${API_URL}/api/generate-resume`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: resumeFormData,
-        }),
-        fetch(`${API_URL}/api/analyze-resume`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: resumeFormData,
-        }),
-      ]);
+      const resumeResponse = await fetch(`${API_URL}/api/generate-resume`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: resumeFormData,
+      });
 
       if (!resumeResponse.ok) {
         const errorData = await resumeResponse.json();
         throw new Error(errorData.detail || "Failed to generate resume");
       }
 
-      if (!atsResponse.ok) {
-        const errorData = await atsResponse.json();
-        throw new Error(errorData.detail || "Failed to analyze resume");
-      }
-
-      const [resumeData, atsData] = await Promise.all([
-        resumeResponse.json(),
-        atsResponse.json(),
-      ]);
-
+      const resumeData = await resumeResponse.json();
       setGeneratedResume(resumeData.tailored_resume);
-      setATSAnalysis(atsData.analysis);
 
       // Generate cover letter
       const coverLetterFormData = new FormData();
@@ -304,23 +330,35 @@ function GeneratorContent() {
                       />
                     </div>
 
-                    <Button
-                      type="submit"
-                      variant="blue"
-                      className="w-full"
-                      disabled={isLoading}
-                    >
-                      {isLoading
-                        ? "Generating..."
-                        : "Generate Resume & Cover Letter"}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        type="submit"
+                        variant="blue"
+                        className="flex-1"
+                        disabled={isLoading}
+                      >
+                        {isLoading
+                          ? "Generating..."
+                          : "Generate Resume & Cover Letter"}
+                      </Button>
+
+                      <Button
+                        type="button"
+                        variant="blue"
+                        className="flex-1"
+                        onClick={analyzeATS}
+                        disabled={isAnalyzing}
+                      >
+                        {isAnalyzing ? "Analyzing..." : "Analyze ATS"}
+                      </Button>
+                    </div>
                   </form>
                 </Form>
               </CardContent>
             </Card>
 
             {/* ATS Score */}
-            <ATSScore analysis={atsAnalysis} isLoading={isLoading} />
+            <ATSScore analysis={atsAnalysis} isLoading={isAnalyzing} />
           </div>
 
           {/* Output Section */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CheckCircle, Info } from "lucide-react";
+import { AlertCircle, CheckCircle, Info, Search } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -51,15 +51,15 @@ export function ATSScore({ analysis, isLoading }: ATSScoreProps) {
             ATS Analysis
           </CardTitle>
           <CardDescription>
-            Generate your resume to see ATS analysis
+            Click "Analyze ATS" to check your resume
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="flex flex-col items-center justify-center py-8 text-center">
-            <Info className="h-12 w-12 text-blue-300 mb-4 dark:text-blue-700" />
+            <Search className="h-12 w-12 text-blue-300 mb-4 dark:text-blue-700" />
             <p className="text-sm text-slate-500 max-w-md dark:text-slate-400">
-              Fill out the form and click "Generate" to analyze your resume's
-              ATS compatibility.
+              Use the "Analyze ATS" button to check how your resume performs
+              with Applicant Tracking Systems.
             </p>
           </div>
         </CardContent>
