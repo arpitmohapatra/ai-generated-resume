@@ -27,6 +27,7 @@ import {
 } from "../../components/ui/card";
 import { ResumeUploader } from "../../components/resume-uploader";
 import { GeneratedContent } from "../../components/generated-content";
+import { ATSScore } from "../../components/ats-score";
 import { ProtectedRoute } from "../../components/protected-route";
 import { useAuth } from "../../contexts/auth-context";
 import { ThemeToggle } from "../../components/theme/theme-toggle";
@@ -45,6 +46,7 @@ function GeneratorContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [generatedResume, setGeneratedResume] = useState<string>("");
   const [generatedCoverLetter, setGeneratedCoverLetter] = useState<string>("");
+  const [atsAnalysis, setATSAnalysis] = useState(null);
   const [activeTab, setActiveTab] = useState<"resume" | "coverLetter">(
     "resume"
   );
@@ -60,6 +62,7 @@ function GeneratorContent() {
 
   const handleFileUpload = async (file: File) => {
     setIsLoading(true);
+    setATSAnalysis(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -91,6 +94,7 @@ function GeneratorContent() {
 
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
+    setATSAnalysis(null);
 
     try {
       const token = localStorage.getItem("token");
@@ -103,21 +107,40 @@ function GeneratorContent() {
         resumeFormData.append("additional_info", values.additionalInfo);
       }
 
-      const resumeResponse = await fetch(`${API_URL}/api/generate-resume`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: resumeFormData,
-      });
+      const [resumeResponse, atsResponse] = await Promise.all([
+        fetch(`${API_URL}/api/generate-resume`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: resumeFormData,
+        }),
+        fetch(`${API_URL}/api/analyze-resume`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: resumeFormData,
+        }),
+      ]);
 
       if (!resumeResponse.ok) {
         const errorData = await resumeResponse.json();
         throw new Error(errorData.detail || "Failed to generate resume");
       }
 
-      const resumeData = await resumeResponse.json();
+      if (!atsResponse.ok) {
+        const errorData = await atsResponse.json();
+        throw new Error(errorData.detail || "Failed to analyze resume");
+      }
+
+      const [resumeData, atsData] = await Promise.all([
+        resumeResponse.json(),
+        atsResponse.json(),
+      ]);
+
       setGeneratedResume(resumeData.tailored_resume);
+      setATSAnalysis(atsData.analysis);
 
       // Generate cover letter
       const coverLetterFormData = new FormData();
@@ -195,7 +218,7 @@ function GeneratorContent() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Section */}
-          <div>
+          <div className="space-y-8">
             <Card className="border-blue-100 shadow-md dark:border-blue-900/50">
               <CardHeader className="bg-blue-50 border-b border-blue-100 dark:bg-blue-950/20 dark:border-blue-900/50">
                 <CardTitle className="text-blue-600 dark:text-blue-400">
@@ -270,8 +293,8 @@ function GeneratorContent() {
                             </FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Add any additional information or specific instructions"
-                                className="min-h-[80px] max-h-[160px] border-blue-200 dark:border-blue-900/50"
+                                placeholder="Add any additional information or specific requirements"
+                                className="min-h-[80px] max-h-[80px] border-blue-200 dark:border-blue-900/50"
                                 {...field}
                               />
                             </FormControl>
@@ -295,61 +318,41 @@ function GeneratorContent() {
                 </Form>
               </CardContent>
             </Card>
+
+            {/* ATS Score */}
+            <ATSScore analysis={atsAnalysis} isLoading={isLoading} />
           </div>
 
           {/* Output Section */}
-          <div>
-            <Card className="h-full flex flex-col border-blue-100 shadow-md dark:border-blue-900/50">
-              <CardHeader className="bg-blue-50 border-b border-blue-100 dark:bg-blue-950/20 dark:border-blue-900/50">
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-blue-600 dark:text-blue-400">
-                    Generated Content
-                  </CardTitle>
-                  <div className="flex gap-2">
-                    <Button
-                      variant={activeTab === "resume" ? "blue" : "outline"}
-                      size="sm"
-                      onClick={() => setActiveTab("resume")}
-                      className={
-                        activeTab !== "resume"
-                          ? "border-blue-200 dark:border-blue-900/50"
-                          : ""
-                      }
-                    >
-                      Resume
-                    </Button>
-                    <Button
-                      variant={activeTab === "coverLetter" ? "blue" : "outline"}
-                      size="sm"
-                      onClick={() => setActiveTab("coverLetter")}
-                      className={
-                        activeTab !== "coverLetter"
-                          ? "border-blue-200 dark:border-blue-900/50"
-                          : ""
-                      }
-                    >
-                      Cover Letter
-                    </Button>
-                  </div>
-                </div>
-                <CardDescription>
-                  {activeTab === "resume"
-                    ? "Your tailored resume based on the job description"
-                    : "Your personalized cover letter"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 overflow-auto pt-6">
-                <GeneratedContent
-                  content={
-                    activeTab === "resume"
-                      ? generatedResume
-                      : generatedCoverLetter
-                  }
-                  type={activeTab}
-                  isLoading={isLoading}
-                />
-              </CardContent>
-            </Card>
+          <div className="space-y-4">
+            <div className="flex gap-2 mb-4">
+              <Button
+                variant={activeTab === "resume" ? "blue" : "ghost"}
+                onClick={() => setActiveTab("resume")}
+              >
+                Resume
+              </Button>
+              <Button
+                variant={activeTab === "coverLetter" ? "blue" : "ghost"}
+                onClick={() => setActiveTab("coverLetter")}
+              >
+                Cover Letter
+              </Button>
+            </div>
+
+            {activeTab === "resume" ? (
+              <GeneratedContent
+                content={generatedResume}
+                type="resume"
+                isLoading={isLoading}
+              />
+            ) : (
+              <GeneratedContent
+                content={generatedCoverLetter}
+                type="coverLetter"
+                isLoading={isLoading}
+              />
+            )}
           </div>
         </div>
       </div>

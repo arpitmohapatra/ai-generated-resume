@@ -10,4 +10,5 @@ pytesseract==0.3.13
 pillow==11.0.0
 docx2txt==0.8
 python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4 
+passlib[bcrypt]==1.7.4
+nltk==3.8.1 
