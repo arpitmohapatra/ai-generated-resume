@@ -15,7 +15,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:3001",
-        "https://arpitmohapatra.github.io",  # GitHub Pages domain
+        "https://arpitmohapatra.github.io",
+        "https://aceresume.top",  # GitHub Pages domain
     ],
     allow_credentials=True,
     allow_methods=["*"],
